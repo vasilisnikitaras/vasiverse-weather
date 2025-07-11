@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>VasiVerse – Smart Forecast</title>
+
+  <style>
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      margin: 0;
+      font-family: 'Arial', sans-serif;
+      background-color: #ffffff;
+      color: #111111;
+      text-align: center;
+      transition: background-color 0.4s ease, color 0.4s ease;
+    }
+
+    header {
+      background-color: #0288d1;
+      color: white;
+      padding: 20px 40px;
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    header h1 {
+      font-size: 1.8em;
+      margin: 0;
+      flex: 1 1 auto;
+      text-align: left;
+    }
+
+    .nav-button, #dark-mode-toggle {
+      margin-left: 12px;
+      font-size: 18px;
+      padding: 8px 12px;
+      border: none;
+      border-radius: 6px;
+      text-decoration: none;
+      cursor: pointer;
+    }
+
+    .nav-button {
+      background-color: white;
+      color: #0288d1;
+      font-weight: bold;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+    }
+
+    #dark-mode-toggle {
+      background: none;
+      color: white;
+    }
+
+    #splash-screen {
+      padding: 40px 20px;
+    }
+
+    main {
+      padding: 20px;
+    }
+
+    #forecast-container {
+      margin-top: 20px;
+      padding: 20px;
+      background-color: #f0f8ff;
+      border-radius: 8px;
+    }
+
+    @media screen and (max-width: 600px) {
+      header {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+
+      .nav-button, #dark-mode-toggle {
+        margin-top: 10px;
+        font-size: 16px;
+      }
+
+      header h1 {
+        font-size: 1.4em;
+      }
+    }
+
+    .dark-mode {
+      background-color: #121212;
+      color: #eeeeee;
+    }
+
+    .dark-mode #forecast-container {
+      background-color: #1e2e3e;
+    }
+
+    footer {
+      margin: 40px 0;
+      font-size: 0.9em;
+      color: #555;
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <h1>🌤️ VasiVerse Forecast</h1>
+    <a href="/" class="nav-button">🏠 Back to VasiVerse.com</a>
+    <button id="dark-mode-toggle" title="Toggle Dark Mode">🌙</button>
+  </header>
+
+  <div id="splash-screen">
+    <h2>Welcome to VasiVerse 🌤️</h2>
+    <p>Scanning skies for your personal forecast...</p>
+  </div>
+
+  <main>
+    <section id="weather">
+      <h2>Your Local 5-Day Forecast</h2>
+      <div id="forecast-container">⏳ Loading forecast...</div>
+    </section>
+  </main>
+
+  <footer>
+    ⚡ Created with love by Vasilis & Copilot  
+  </footer>
+
+  <script>
+    const toggleBtn = document.getElementById("dark-mode-toggle");
+    const forecastContainer = document.getElementById("forecast-container");
+
+    if (localStorage.getItem("darkMode") === "enabled" ||
+        (!localStorage.getItem("darkMode") && window.matchMedia("(prefers-color-scheme: dark)").matches)) {
+      document.body.classList.add("dark-mode");
+    }
+
+    toggleBtn?.addEventListener("click", () => {
+      const isDark = document.body.classList.toggle("dark-mode");
+      localStorage.setItem("darkMode", isDark ? "enabled" : "disabled");
+    });
+
+    const forecastHTML = `
+      <ul style="list-style: none; padding: 0;">
+        <li>🌤️ Monday: Sunny, 24°C</li>
+        <li>🌥️ Tuesday: Cloudy, 22°C</li>
+        <li>🌧️ Wednesday: Rain, 19°C</li>
+        <li>⛅ Thursday: Partly Cloudy, 21°C</li>
+        <li>☀️ Friday: Clear, 25°C</li>
+      </ul>
+    `;
+
+    forecastContainer.innerHTML = forecastHTML;
+  </script>
+
+</body>
+</html>
