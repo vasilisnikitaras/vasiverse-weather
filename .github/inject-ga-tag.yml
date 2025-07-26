@@ -1,1 +1,40 @@
 
+name: Inject Google Analytics Tag
+
+on:
+  push:
+    paths:
+      - '**/*.html'
+
+jobs:
+  ga-tag-injection:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout repo
+      uses: actions/checkout@v3
+
+    - name: Inject GA tag
+      run: |
+        TAG='<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-KHSFZ19HYY"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag("js", new Date());
+  gtag("config", "G-KHSFZ19HYY");
+</script>'
+
+        find . -name "*.html" | while read file; do
+          if ! grep -q "gtag.js?id=G-KHSFZ19HYY" "$file"; then
+            sed -i "/<head>/a $TAG" "$file"
+            echo "Injected tag into $file"
+          fi
+        done
+
+    - name: Commit changes
+      run: |
+        git config --global user.name "vasifanes-bot"
+        git config --global user.email "bot@vasiverse.com"
+        git add .
+        git commit -m "Auto-injected GA tag across HTML files"
+        git push
